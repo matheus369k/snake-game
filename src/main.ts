@@ -1,31 +1,31 @@
-import { loadSneakUI } from '@scripts/render-sneak-ui'
+import { loadSnakeUI } from '@scripts/render-snake-ui'
 import { generateMatriz, updateMatriz } from '@scripts/screen-matriz'
-import { calculateSneakNextPosition } from '@scripts/calculate-sneak-next-position'
+import { calculateSnakeNextPosition } from '@scripts/calculate-snake-next-position'
 import { loadFruitUI, resetFruitUI } from '@scripts/render-fruit-ui'
 import {
   dragControlManager,
   keyBoardControlManager,
-  sneakDirection,
+  snakeDirection,
 } from '@scripts/control-manager'
 import {
   renderCountUI,
   togglePauseDisplayUI,
-  renderSpeedSneakUI,
+  renderSpeedSnakeUI,
   gameOverDisplayUI,
 } from '@scripts/render-display-iu'
 import '@/style.css'
 
-let runSneakIntervalID: number
+let runSnakeIntervalID: number
 let isGameOver: boolean
 
-let sneakPositionY = 12
-let sneakPositionX = 12
+let snakePositionY = 12
+let snakePositionX = 12
 
 let userPointCount = 0
-let sneakSpeedInMs = 250
+let snakeSpeedInMs = 250
 
-let columnSize = (sneakPositionY + 1) * 2
-let rowSize = (sneakPositionX + 1) * 2
+let columnSize = (snakePositionY + 1) * 2
+let rowSize = (snakePositionX + 1) * 2
 let matriz = generateMatriz({
   columnSize,
   rowSize,
@@ -50,27 +50,27 @@ document.addEventListener('dragend', (props) => {
 
 document.addEventListener('keydown', (props) => {
   keyBoardControlManager({ code: props.code })
-  togglePauseDisplayUI(sneakDirection.current)
+  togglePauseDisplayUI(snakeDirection.current)
 
-  const isPaused = sneakDirection.current === 'stop'
+  const isPaused = snakeDirection.current === 'stop'
   if (isPaused) {
-    runSneakGameAgain()
-    resetSneakGame()
+    runSnakeGameAgain()
+    resetSnakeGame()
 
-    clearInterval(runSneakIntervalID)
-    runSneakIntervalID = 0
+    clearInterval(runSnakeIntervalID)
+    runSnakeIntervalID = 0
     return
   }
 
-  if (runSneakIntervalID) return
-  runningSneakGame()
+  if (runSnakeIntervalID) return
+  runningSnakeGame()
 })
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadSneakUI<typeof sneakDirection.current>(matriz, sneakDirection.current)
+  loadSnakeUI<typeof snakeDirection.current>(matriz, snakeDirection.current)
 })
 
-function runSneakGameAgain() {
+function runSnakeGameAgain() {
   document.getElementById('run-game')?.addEventListener('click', () => {
     const customKeyBoardEvent = new KeyboardEvent('keydown', {
       code: 'Escape',
@@ -84,46 +84,46 @@ function runSneakGameAgain() {
 }
 
 function gameOver() {
-  isGameOver = matriz[sneakPositionY][sneakPositionX] !== 'void'
+  isGameOver = matriz[snakePositionY][snakePositionX] !== 'void'
   gameOverDisplayUI({
-    speed: sneakSpeedInMs,
+    speed: snakeSpeedInMs,
     score: userPointCount,
     isGameOver,
   })
 
   if (isGameOver) {
-    resetSneakGame()
-    clearInterval(runSneakIntervalID)
-    runSneakIntervalID = 0
+    resetSnakeGame()
+    clearInterval(runSnakeIntervalID)
+    runSnakeIntervalID = 0
     return
   }
 }
 
-function resetSneakGame() {
+function resetSnakeGame() {
   document.getElementById('reset-game')?.addEventListener('click', () => {
     keyBoardControlManager({ code: 'reset' })
-    togglePauseDisplayUI(sneakDirection.current)
+    togglePauseDisplayUI(snakeDirection.current)
     resetFruitUI()
 
     isGameOver = false
 
-    sneakPositionY = 12
-    sneakPositionX = 12
+    snakePositionY = 12
+    snakePositionX = 12
 
     userPointCount = 0
-    sneakSpeedInMs = 250
+    snakeSpeedInMs = 250
 
-    columnSize = (sneakPositionY + 1) * 2
-    rowSize = (sneakPositionX + 1) * 2
+    columnSize = (snakePositionY + 1) * 2
+    rowSize = (snakePositionX + 1) * 2
     matriz = generateMatriz({
       columnSize,
       rowSize,
     })
 
     renderCountUI(userPointCount)
-    renderSpeedSneakUI(sneakSpeedInMs)
+    renderSpeedSnakeUI(snakeSpeedInMs)
     gameOverDisplayUI({
-      speed: sneakSpeedInMs,
+      speed: snakeSpeedInMs,
       score: userPointCount,
       isGameOver,
     })
@@ -133,29 +133,29 @@ function resetSneakGame() {
   })
 }
 
-function runningSneakGame() {
-  runSneakIntervalID = setInterval(() => {
-    const nextPosition = calculateSneakNextPosition({
-      sneakDirection: sneakDirection.current,
-      positionY: sneakPositionY,
-      positionX: sneakPositionX,
+function runningSnakeGame() {
+  runSnakeIntervalID = setInterval(() => {
+    const nextPosition = calculateSnakeNextPosition({
+      snakeDirection: snakeDirection.current,
+      positionY: snakePositionY,
+      positionX: snakePositionX,
       columnSize,
       rowSize,
     })
 
-    sneakPositionY = nextPosition.positionY
-    sneakPositionX = nextPosition.positionX
+    snakePositionY = nextPosition.positionY
+    snakePositionX = nextPosition.positionX
 
     gameOver()
 
     matriz = updateMatriz({
-      nextPositionY: sneakPositionY,
-      nextPositionX: sneakPositionX,
+      nextPositionY: snakePositionY,
+      nextPositionX: snakePositionX,
       userPointCount,
       matriz,
     })
 
-    loadSneakUI<typeof sneakDirection.current>(matriz, sneakDirection.current)
+    loadSnakeUI<typeof snakeDirection.current>(matriz, snakeDirection.current)
 
     const eatingCount = loadFruitUI({
       columnSize,
@@ -164,14 +164,14 @@ function runningSneakGame() {
 
     if (eatingCount) {
       userPointCount = userPointCount + eatingCount
-      sneakSpeedInMs = sneakSpeedInMs - userPointCount / 10
+      snakeSpeedInMs = snakeSpeedInMs - userPointCount / 10
 
       renderCountUI(userPointCount - 1)
-      renderSpeedSneakUI(sneakSpeedInMs)
+      renderSpeedSnakeUI(snakeSpeedInMs)
 
-      clearInterval(runSneakIntervalID)
-      runSneakIntervalID = 0
-      runningSneakGame()
+      clearInterval(runSnakeIntervalID)
+      runSnakeIntervalID = 0
+      runningSnakeGame()
     }
-  }, sneakSpeedInMs)
+  }, snakeSpeedInMs)
 }

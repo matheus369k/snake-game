@@ -1,7 +1,7 @@
 import type { MatrizType } from './screen-matriz'
 
 const bgScreenXadrezColors = ['color-one', 'color-two']
-export function loadSneakUI<T>(matriz: MatrizType, direction: T) {
+export function loadSnakeUI<T>(matriz: MatrizType, direction: T) {
   for (let PositionX = 0; PositionX < matriz.length; PositionX++) {
     bgScreenXadrezColors.reverse()
 
@@ -18,24 +18,24 @@ export function loadSneakUI<T>(matriz: MatrizType, direction: T) {
       }
 
       if (value === 'head') {
-        loadSneakHeadUI<T>(currentElementID, direction)
+        loadSnakeHeadUI<T>(currentElementID, direction)
         continue
       }
 
       if (value.includes('body')) {
-        loadSneakBodyUI(currentElementID)
+        loadSnakeBodyUI(currentElementID)
         continue
       }
 
       if (value === 'tail') {
-        loadSneakTailUI<T>(currentElementID, direction)
+        loadSnakeTailUI<T>(currentElementID, direction)
         continue
       }
     }
   }
 }
 
-function loadSneakHeadUI<T>(elementId: string, direction: T) {
+function loadSnakeHeadUI<T>(elementId: string, direction: T) {
   let rotate = '0deg'
   if (direction === 'top') rotate = '180deg'
   if (direction === 'right') rotate = '270deg'
@@ -45,20 +45,20 @@ function loadSneakHeadUI<T>(elementId: string, direction: T) {
   const element = document.getElementById(elementId)
   if (!element) return
 
-  element.setAttribute('class', 'sneak-head')
+  element.setAttribute('class', 'snake-head')
   element.setAttribute('data-point', '')
   element.style.rotate = rotate
 }
 
-function loadSneakBodyUI(elementId: string) {
+function loadSnakeBodyUI(elementId: string) {
   const element = document.getElementById(elementId)
   if (!element) return
 
-  element.setAttribute('class', 'sneak-body')
+  element.setAttribute('class', 'snake-body')
   element.style.rotate = ''
 }
 
-function loadSneakTailUI<T>(elementId: string, direction: T) {
+function loadSnakeTailUI<T>(elementId: string, direction: T) {
   let rotate = '0deg'
   if (direction === 'top') rotate = '180deg'
   if (direction === 'right') rotate = '270deg'
@@ -68,7 +68,7 @@ function loadSneakTailUI<T>(elementId: string, direction: T) {
   const element = document.getElementById(elementId)
   if (!element) return
 
-  element.setAttribute('class', 'sneak-tail')
+  element.setAttribute('class', 'snake-tail')
   element.style.rotate = rotate
 }
 

@@ -5,19 +5,19 @@ export function renderCountUI(count: number) {
   element.innerText = count.toString()
 }
 
-export function renderSpeedSneakUI(speed: number) {
+export function renderSpeedSnakeUI(speed: number) {
   const element = document.getElementById('game-speed')
   if (!element) return
 
   element.innerText = `${Math.ceil(speed)}/ms`
 }
 
-export function togglePauseDisplayUI(sneakDirection: string) {
+export function togglePauseDisplayUI(snakeDirection: string) {
   const element = document.getElementById('pause-display')
   if (!element) return
 
   let elementContent = ''
-  if (sneakDirection === 'stop') {
+  if (snakeDirection === 'stop') {
     elementContent =
       '<h1>Pausado</h1>' +
       '<div class="pause-control">' +

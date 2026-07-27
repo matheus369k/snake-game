@@ -60,9 +60,9 @@ export function updateMatriz(props: UpdateMatrizProps) {
         continue
       }
 
-      const sneakBodyNumber = Number(element.split('-')[1]) + 1
-      if (element.includes('body') && sneakBodyNumber <= userPointCount) {
-        matriz[positionY][positionX] = `body-${sneakBodyNumber}` as any
+      const snakeBodyNumber = Number(element.split('-')[1]) + 1
+      if (element.includes('body') && snakeBodyNumber <= userPointCount) {
+        matriz[positionY][positionX] = `body-${snakeBodyNumber}` as any
         continue
       }
 

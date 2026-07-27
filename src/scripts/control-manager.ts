@@ -9,12 +9,12 @@ export const controlsKeys = {
 }
 
 type ControlsDirectionName = keyof typeof controlsKeys | 'start'
-type SneakDirection = {
+type SnakeDirection = {
   previous: ControlsDirectionName
   current: ControlsDirectionName
 }
 
-export const sneakDirection: SneakDirection = {
+export const snakeDirection: SnakeDirection = {
   previous: 'bottom',
   current: 'start',
 }
@@ -33,69 +33,69 @@ export function keyBoardControlManager({ code }: KeyBoardControlManagerProps) {
     })
 
   const notTurnedFromTopToBottom =
-    sneakDirection.current === 'bottom' && currentDirectionKeyCode === 'top'
+    snakeDirection.current === 'bottom' && currentDirectionKeyCode === 'top'
   if (notTurnedFromTopToBottom) return
 
   const notTurnedFromBottomToTop =
-    sneakDirection.current === 'top' && currentDirectionKeyCode === 'bottom'
+    snakeDirection.current === 'top' && currentDirectionKeyCode === 'bottom'
   if (notTurnedFromBottomToTop) return
 
   const notTurnedFromLeftToRight =
-    sneakDirection.current === 'left' && currentDirectionKeyCode === 'right'
+    snakeDirection.current === 'left' && currentDirectionKeyCode === 'right'
   if (notTurnedFromLeftToRight) return
 
   const notTurnedFromRightToLeft =
-    sneakDirection.current === 'right' && currentDirectionKeyCode === 'left'
+    snakeDirection.current === 'right' && currentDirectionKeyCode === 'left'
   if (notTurnedFromRightToLeft) return
 
-  const { current, previous } = sneakDirection
+  const { current, previous } = snakeDirection
   const notClickedInStopTwoTimes =
-    sneakDirection.current === 'stop' && currentDirectionKeyCode === 'stop'
+    snakeDirection.current === 'stop' && currentDirectionKeyCode === 'stop'
   if (notClickedInStopTwoTimes) {
-    sneakDirection.current = previous === 'start' ? 'bottom' : previous
-    sneakDirection.previous = current
+    snakeDirection.current = previous === 'start' ? 'bottom' : previous
+    snakeDirection.previous = current
     return
   }
 
-  const sneakHeadElement = document.querySelector('.sneak-head')
-  const sneakHeadID = sneakHeadElement?.id.split('/')
-  let sneakHeadCoordinateX = Number(sneakHeadID?.[0].split('X-')[1])
-  let sneakHeadCoordinateY = Number(sneakHeadID?.[1].split('Y-')[1])
-  let sneakElement = null
+  const snakeHeadElement = document.querySelector('.snake-head')
+  const snakeHeadID = snakeHeadElement?.id.split('/')
+  let snakeHeadCoordinateX = Number(snakeHeadID?.[0].split('X-')[1])
+  let snakeHeadCoordinateY = Number(snakeHeadID?.[1].split('Y-')[1])
+  let snakeElement = null
   switch (currentDirectionKeyCode) {
     case 'top':
-      sneakElement = document.getElementById(
-        `X-${sneakHeadCoordinateX - 1}/Y-${sneakHeadCoordinateY}`,
+      snakeElement = document.getElementById(
+        `X-${snakeHeadCoordinateX - 1}/Y-${snakeHeadCoordinateY}`,
       )
       break
     case 'bottom':
-      sneakElement = document.getElementById(
-        `X-${sneakHeadCoordinateX + 1}/Y-${sneakHeadCoordinateY}`,
+      snakeElement = document.getElementById(
+        `X-${snakeHeadCoordinateX + 1}/Y-${snakeHeadCoordinateY}`,
       )
       break
     case 'left':
-      sneakElement = document.getElementById(
-        `X-${sneakHeadCoordinateX}/Y-${sneakHeadCoordinateY - 1}`,
+      snakeElement = document.getElementById(
+        `X-${snakeHeadCoordinateX}/Y-${snakeHeadCoordinateY - 1}`,
       )
       break
     case 'right':
-      sneakElement = document.getElementById(
-        `X-${sneakHeadCoordinateX}/Y-${sneakHeadCoordinateY + 1}`,
+      snakeElement = document.getElementById(
+        `X-${snakeHeadCoordinateX}/Y-${snakeHeadCoordinateY + 1}`,
       )
       break
   }
 
-  if (sneakElement && !sneakElement.classList.contains('empty-field')) return
+  if (snakeElement && !snakeElement.classList.contains('empty-field')) return
 
   if (currentDirectionKeyCode) {
-    sneakDirection.current = currentDirectionKeyCode
-    sneakDirection.previous = current
+    snakeDirection.current = currentDirectionKeyCode
+    snakeDirection.previous = current
     return
   }
 
   if (code === 'reset') {
-    sneakDirection.current = 'start'
-    sneakDirection.previous = 'bottom'
+    snakeDirection.current = 'start'
+    snakeDirection.previous = 'bottom'
   }
 }
 

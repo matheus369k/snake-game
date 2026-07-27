@@ -1,14 +1,14 @@
-type RunningSneakPosition<T> = {
-  sneakDirection: T
+type RunningSnakePosition<T> = {
+  snakeDirection: T
   positionY: number
   positionX: number
   columnSize: number
   rowSize: number
 }
 
-export function calculateSneakNextPosition<T>(props: RunningSneakPosition<T>) {
-  const { sneakDirection, positionY, positionX, columnSize, rowSize } = props
-  switch (sneakDirection) {
+export function calculateSnakeNextPosition<T>(props: RunningSnakePosition<T>) {
+  const { snakeDirection, positionY, positionX, columnSize, rowSize } = props
+  switch (snakeDirection) {
     case 'top':
       if (positionY === 0) {
         return {
