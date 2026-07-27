@@ -1,19 +1,19 @@
-import { loadSneakUI } from './scripts/render-sneak-ui'
-import { generateMatriz, updateMatriz } from './scripts/screen-matriz'
-import { calculateSneakNextPosition } from './scripts/calculate-sneak-next-position'
-import { loadFruitUI, resetFruitUI } from './scripts/render-fruit-ui'
+import { loadSneakUI } from '@scripts/render-sneak-ui'
+import { generateMatriz, updateMatriz } from '@scripts/screen-matriz'
+import { calculateSneakNextPosition } from '@scripts/calculate-sneak-next-position'
+import { loadFruitUI, resetFruitUI } from '@scripts/render-fruit-ui'
 import {
   dragControlManager,
   keyBoardControlManager,
   sneakDirection,
-} from './scripts/control-manager'
+} from '@scripts/control-manager'
 import {
   renderCountUI,
   togglePauseDisplayUI,
   renderSpeedSneakUI,
   gameOverDisplayUI,
-} from './scripts/render-display-iu'
-import './style.css'
+} from '@scripts/render-display-iu'
+import '@/style.css'
 
 let runSneakIntervalID: number
 let isGameOver: boolean
@@ -21,7 +21,7 @@ let isGameOver: boolean
 let sneakPositionY = 12
 let sneakPositionX = 12
 
-let userPointCount = 6
+let userPointCount = 0
 let sneakSpeedInMs = 250
 
 let columnSize = (sneakPositionY + 1) * 2

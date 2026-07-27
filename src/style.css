@@ -176,7 +176,7 @@ body {
   top: 50%;
   right: 0.5rem;
   translate: 0 -50%;
-  background-image: url('apple.svg');
+  background-image: url('/apple.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -201,7 +201,7 @@ body {
 }
 
 .sneak-head {
-  background-image: url('sneak-head.png');
+  background-image: url('/sneak-head.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -255,7 +255,7 @@ body {
 
   &[data-point='fruit-apple']::before {
     content: '';
-    background-image: url('apple.svg');
+    background-image: url('/apple.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
