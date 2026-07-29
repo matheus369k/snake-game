@@ -26,6 +26,12 @@ const controlsKeysArray = Object.entries(controlsKeys) as [
 type KeyBoardControlManagerProps = Pick<KeyboardEvent, 'code'>
 
 export function keyBoardControlManager({ code }: KeyBoardControlManagerProps) {
+  if (code === 'reset') {
+    snakeDirection.current = 'start'
+    snakeDirection.previous = 'bottom'
+    return
+  }
+
   const currentDirectionKeyCode =
     runningCurrentDirectionKeyBoard<ControlsDirectionName>({
       keyBoardName: code,
@@ -92,36 +98,33 @@ export function keyBoardControlManager({ code }: KeyBoardControlManagerProps) {
     snakeDirection.previous = current
     return
   }
-
-  if (code === 'reset') {
-    snakeDirection.current = 'start'
-    snakeDirection.previous = 'bottom'
-  }
 }
 
-type DragControlManagerProps = Pick<DragEvent, 'x' | 'y'> & {
-  dragStartX: number
-  dragStartY: number
+type TouchControlManagerProps = {
+  touchStartX: number
+  touchStartY: number
+  touchEndX: number
+  touchEndY: number
 }
-export function dragControlManager(props: DragControlManagerProps) {
-  const { dragStartX, dragStartY, x: dragEndX, y: dragEndY } = props
+export function touchControlManager(props: TouchControlManagerProps) {
+  const { touchStartX, touchStartY, touchEndX, touchEndY } = props
 
   const calcStartToEndPositionX = Math.abs(
-    Math.abs(dragStartX) - Math.abs(dragEndX),
+    Math.abs(touchStartX) - Math.abs(touchEndX),
   )
   const calcStartToEndPositionY = Math.abs(
-    Math.abs(dragStartY) - Math.abs(dragEndY),
+    Math.abs(touchStartY) - Math.abs(touchEndY),
   )
 
-  let dragDirection: keyof typeof controlsKeys =
-    dragStartX > dragEndX ? 'left' : 'right'
+  let touchDirection: keyof typeof controlsKeys =
+    touchStartX > touchEndX ? 'left' : 'right'
   if (calcStartToEndPositionY > calcStartToEndPositionX) {
-    dragDirection = dragStartY > dragEndY ? 'top' : 'bottom'
+    touchDirection = touchStartY > touchEndY ? 'top' : 'bottom'
   }
 
   const customKeyBoardEvent = new KeyboardEvent('keydown', {
-    code: controlsKeys[dragDirection][0],
-    key: controlsKeys[dragDirection][0],
+    code: controlsKeys[touchDirection][0],
+    key: controlsKeys[touchDirection][0],
     cancelable: true,
     bubbles: true,
   })

@@ -30,7 +30,12 @@
 html,
 body {
   background-color: var(--bg);
-  height: 100vh;
+  overscroll-behavior-y: none;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  max-height: 100dvh;
 }
 
 * {

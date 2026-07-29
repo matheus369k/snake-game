@@ -3,7 +3,7 @@ import { generateMatriz, updateMatriz } from '@scripts/screen-matriz'
 import { calculateSnakeNextPosition } from '@scripts/calculate-snake-next-position'
 import { loadFruitUI, resetFruitUI } from '@scripts/render-fruit-ui'
 import {
-  dragControlManager,
+  touchControlManager,
   keyBoardControlManager,
   snakeDirection,
 } from '@scripts/control-manager'
@@ -16,7 +16,7 @@ import {
 import '@/style.css'
 
 let runSnakeIntervalID: number
-let isGameOver: boolean
+let isGameOver: boolean = false
 
 let snakePositionY = 12
 let snakePositionX = 12
@@ -31,24 +31,25 @@ let matriz = generateMatriz({
   rowSize,
 })
 
-let dragStartX = 0
-let dragStartY = 0
+let touchStartX = 0
+let touchStartY = 0
 
-document.addEventListener('dragstart', (props) => {
-  dragStartX = props.x
-  dragStartY = props.y
+document.addEventListener('touchstart', (props) => {
+  touchStartX = props.changedTouches[0].screenX
+  touchStartY = props.changedTouches[0].screenY
 })
 
-document.addEventListener('dragend', (props) => {
-  dragControlManager({
-    dragStartX,
-    dragStartY,
-    x: props.x,
-    y: props.y,
+document.addEventListener('touchend', (props) => {
+  touchControlManager({
+    touchEndX: props.changedTouches[0].screenX,
+    touchEndY: props.changedTouches[0].screenY,
+    touchStartX,
+    touchStartY,
   })
 })
 
 document.addEventListener('keydown', (props) => {
+  if (isGameOver) return
   keyBoardControlManager({ code: props.code })
   togglePauseDisplayUI(snakeDirection.current)
 
@@ -83,8 +84,8 @@ function runSnakeGameAgain() {
   })
 }
 
-function gameOver() {
-  isGameOver = matriz[snakePositionY][snakePositionX] !== 'void'
+function gameOver(props: { positionY: number; positionX: number }) {
+  isGameOver = matriz[props.positionY][props.positionX] !== 'void'
   gameOverDisplayUI({
     speed: snakeSpeedInMs,
     score: userPointCount,
@@ -143,10 +144,13 @@ function runningSnakeGame() {
       rowSize,
     })
 
+    gameOver({
+      positionY: nextPosition.positionY,
+      positionX: nextPosition.positionX,
+    })
+
     snakePositionY = nextPosition.positionY
     snakePositionX = nextPosition.positionX
-
-    gameOver()
 
     matriz = updateMatriz({
       nextPositionY: snakePositionY,
