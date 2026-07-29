@@ -12,6 +12,7 @@ import {
   togglePauseDisplayUI,
   renderSpeedSnakeUI,
   gameOverDisplayUI,
+  gameStartDisplayUI,
 } from '@scripts/render-display-iu'
 import '@/style.css'
 
@@ -69,7 +70,23 @@ document.addEventListener('keydown', (props) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSnakeUI<typeof snakeDirection.current>(matriz, snakeDirection.current)
+  startGame()
 })
+
+function startGame() {
+  gameStartDisplayUI(snakeDirection.current)
+  document.getElementById('run-game')?.addEventListener('click', () => {
+    const customKeyBoardEvent = new KeyboardEvent('keydown', {
+      code: 'ArrowDown',
+      key: 'ArrowDown',
+      bubbles: true,
+      cancelable: true,
+    })
+
+    document.dispatchEvent(customKeyBoardEvent)
+    gameStartDisplayUI(snakeDirection.current)
+  })
+}
 
 function runSnakeGameAgain() {
   document.getElementById('run-game')?.addEventListener('click', () => {

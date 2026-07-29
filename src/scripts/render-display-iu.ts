@@ -19,7 +19,7 @@ export function togglePauseDisplayUI(snakeDirection: string) {
   let elementContent = ''
   if (snakeDirection === 'stop') {
     elementContent =
-      '<h1>Pausado</h1>' +
+      '<h2>Pausado</h2>' +
       '<div class="pause-control">' +
       '<button id="reset-game">Reiniciar</button>' +
       '<button id="run-game">Continuar</button>' +
@@ -41,12 +41,25 @@ export function gameOverDisplayUI(props: GameOverDisplayUIProps) {
   let elementContent = ''
   if (props.isGameOver) {
     elementContent =
-      '<h1>Fim de Jogo</h1>' +
+      '<h2>Fim de Jogo</h2>' +
       '<div>' +
       `<span>Pontuação: ${props.score}</span>` +
       `<span>Velocidade(ms): ${Math.ceil(props.speed)}</span>` +
       '</div>' +
       '<button id="reset-game">Reiniciar</button>'
+  }
+
+  element.innerHTML = elementContent
+}
+
+export function gameStartDisplayUI(snakeDirection: string) {
+  const element = document.getElementById('start-game-display')
+  if (!element) return
+
+  let elementContent = ''
+  if (snakeDirection === 'start') {
+    elementContent =
+      '<h2>Começar o Jogo</h2>' + '<button id="run-game">Começar</button>'
   }
 
   element.innerHTML = elementContent

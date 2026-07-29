@@ -54,17 +54,43 @@ body {
   position: relative;
 }
 
-#game-over-display > h1 {
+#start-game-display:has(h2) {
+  position: fixed;
+  inset: 50%;
+  translate: -50% -50%;
   width: max-content;
-  padding-bottom: 1rem;
-}
-
-#game-over-display > div {
+  height: fit-content;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--snake-color);
+  border-radius: 8px;
+  color: var(--snake-color);
+  gap: 1.5rem;
+  z-index: 10;
+  padding: 1rem 2rem;
 }
 
-#game-over-display:has(h1) {
+#start-game-display > button {
+  width: 100%;
+  backdrop-filter: blur(2px);
+  background-color: var(--snake-color);
+  color: var(--text);
+  border-radius: 4px;
+  border: 1px solid var(--screen-border);
+  padding: 0.5rem 2rem;
+  font-family: var(--mono);
+  font-weight: bold;
+  transition: opacity 250ms linear;
+
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+}
+
+#game-over-display:has(h2) {
   position: fixed;
   inset: 50%;
   translate: -50% -50%;
@@ -80,6 +106,16 @@ body {
   gap: 1rem;
   z-index: 10;
   padding: 1rem 2rem;
+}
+
+#game-over-display > h2 {
+  width: max-content;
+  padding-bottom: 1rem;
+}
+
+#game-over-display > div {
+  display: flex;
+  flex-direction: column;
 }
 
 #game-over-display > button {
@@ -100,7 +136,7 @@ body {
   }
 }
 
-#pause-display:has(h1) {
+#pause-display:has(h2) {
   position: fixed;
   inset: 50%;
   translate: -50% -50%;
@@ -118,7 +154,7 @@ body {
   padding: 1rem 2rem;
 }
 
-#pause-display > h1 {
+#pause-display > h2 {
   text-align: center;
 }
 
