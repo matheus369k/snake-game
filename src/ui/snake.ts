@@ -1,4 +1,5 @@
-import type { MatrizType } from './screen-matriz'
+import type { MatrizType } from '@/@types/types'
+import { detectedRotate } from '@/util/detected-rotate'
 
 const bgScreenXadrezColors = ['color-one', 'color-two']
 export function loadSnakeUI<T>(matriz: MatrizType, direction: T) {
@@ -36,14 +37,10 @@ export function loadSnakeUI<T>(matriz: MatrizType, direction: T) {
 }
 
 function loadSnakeHeadUI<T>(elementId: string, direction: T) {
-  let rotate = '0deg'
-  if (direction === 'top') rotate = '180deg'
-  if (direction === 'right') rotate = '270deg'
-  if (direction === 'bottom') rotate = '0deg'
-  if (direction === 'left') rotate = '90deg'
-
   const element = document.getElementById(elementId)
   if (!element) return
+
+  const rotate = detectedRotate(direction as string)
 
   element.setAttribute('class', 'snake-head')
   element.setAttribute('data-point', '')
@@ -59,14 +56,10 @@ function loadSnakeBodyUI(elementId: string) {
 }
 
 function loadSnakeTailUI<T>(elementId: string, direction: T) {
-  let rotate = '0deg'
-  if (direction === 'top') rotate = '180deg'
-  if (direction === 'right') rotate = '270deg'
-  if (direction === 'bottom') rotate = '0deg'
-  if (direction === 'left') rotate = '90deg'
-
   const element = document.getElementById(elementId)
   if (!element) return
+
+  const rotate = detectedRotate(direction as string)
 
   element.setAttribute('class', 'snake-tail')
   element.style.rotate = rotate

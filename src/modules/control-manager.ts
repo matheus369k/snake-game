@@ -1,4 +1,14 @@
-import { runningCurrentDirectionKeyBoard } from './current-direction'
+import { togglePauseDisplayUI } from '@/ui/pause-display'
+import { runningCurrentDirectionKeyBoard } from '@/util/detected-direction'
+import {
+  isGameOver,
+  runSnakeIntervalID,
+  touchStartX,
+  touchStartY,
+  UpdateVariables,
+} from '@/util/global-variables'
+import { resetSnakeGame, runSnakeGameAgain } from './control-display'
+import { runningSnakeGame } from './run-snake'
 
 export const controlsKeys = {
   top: ['ArrowUp', 'KeyW'],
@@ -37,6 +47,10 @@ export function keyBoardControlManager({ code }: KeyBoardControlManagerProps) {
       keyBoardName: code,
       controlsKeys: controlsKeysArray,
     })
+
+  const notTurnedFromStartToStop =
+    snakeDirection.current === 'start' && currentDirectionKeyCode === 'stop'
+  if (notTurnedFromStartToStop) return
 
   const notTurnedFromTopToBottom =
     snakeDirection.current === 'bottom' && currentDirectionKeyCode === 'top'
@@ -129,4 +143,48 @@ export function touchControlManager(props: TouchControlManagerProps) {
     bubbles: true,
   })
   document.dispatchEvent(customKeyBoardEvent)
+}
+
+export function keyDownHandler(props: KeyboardEvent) {
+  if (isGameOver) return
+  keyBoardControlManager({ code: props.code })
+  togglePauseDisplayUI(snakeDirection.current)
+
+  const isPaused = snakeDirection.current === 'stop'
+  if (isPaused) {
+    runSnakeGameAgain()
+    resetSnakeGame()
+
+    clearInterval(runSnakeIntervalID)
+    const updateVariables = new UpdateVariables()
+    updateVariables.updateRunSnakeIntervalID(0)
+    return
+  }
+
+  if (snakeDirection.current === 'start') return
+  if (runSnakeIntervalID) return
+  runningSnakeGame()
+}
+
+export function touchEndHandler(props: TouchEvent) {
+  if (snakeDirection.current === 'start') return
+  if (snakeDirection.current === 'stop') return
+
+  touchControlManager({
+    touchEndX: props.changedTouches[0].screenX,
+    touchEndY: props.changedTouches[0].screenY,
+    touchStartX: touchStartX,
+    touchStartY: touchStartY,
+  })
+}
+
+export function touchStartHandler(props: TouchEvent) {
+  if (snakeDirection.current === 'start') return
+  if (snakeDirection.current === 'stop') return
+
+  const updateVariables = new UpdateVariables()
+  updateVariables.updateTouchStart({
+    newValueX: props.changedTouches[0].screenX,
+    newValueY: props.changedTouches[0].screenY,
+  })
 }

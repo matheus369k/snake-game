@@ -6,7 +6,6 @@ export default defineConfig({
   base: '/snake-game/',
   resolve: {
     alias: {
-      '@scripts': path.resolve(__dirname, './src/scripts'),
       '@': path.resolve(__dirname, './src'),
     },
   },

@@ -27,9 +27,6 @@
       "@/*": [
         "./src/*"
       ],
-      "@scripts/*": [
-        "./src/scripts/*"
-      ]
     }
   },
   "include": [

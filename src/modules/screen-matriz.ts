@@ -1,4 +1,4 @@
-export type MatrizType = ('head' | string | 'tail' | 'void')[][]
+import type { MatrizType } from '@/@types/types'
 
 type GenerateMatrizProps = {
   rowSize: number
