@@ -19,14 +19,8 @@ export function generateMatriz(props: GenerateMatrizProps) {
         return 'head'
       }
 
-      const isBodyPositionOne =
-        positionX === centerPositionX && positionY === centerPositionY - 1
-      if (isBodyPositionOne) {
-        return 'body-1'
-      }
-
       const isTailPosition =
-        positionX === centerPositionX && positionY === centerPositionY - 2
+        positionX === centerPositionX && positionY === centerPositionY - 1
       if (isTailPosition) {
         return 'tail'
       }

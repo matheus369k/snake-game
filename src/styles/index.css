@@ -1,0 +1,61 @@
+@import url('./status-display.css');
+@import url('./screen-game.css');
+@import url('./pause-display.css');
+@import url('./game-over-display.css');
+@import url('./game-start-display.css');
+
+:root {
+  --text: white;
+  --text-h: #08060d;
+  --bg: #000000;
+  --bg-screen-one: #112200;
+  --bg-screen-two: #0f1e00;
+  --screen-border: #0b150064;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  --snake-color: #ccdb38;
+
+  font: 18px/145% var(--mono);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+html,
+body {
+  background-color: var(--bg);
+  overscroll-behavior-y: none;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  max-height: 100dvh;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+#app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100dvw;
+  min-height: 100dvh;
+  position: relative;
+}

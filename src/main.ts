@@ -3,8 +3,8 @@ import {
   touchEndHandler,
   keyDownHandler,
 } from '@/modules/control-manager'
-import '@/style.css'
 import { startGame } from './modules/control-display'
+import '@/styles/index.css'
 
 document.addEventListener('DOMContentLoaded', startGame)
 document.addEventListener('touchstart', touchStartHandler)

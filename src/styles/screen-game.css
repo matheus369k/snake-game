@@ -1,0 +1,83 @@
+#screen {
+  width: 100dvh;
+  max-width: 100%;
+  height: 100dvh;
+  max-height: 100vw;
+  max-width: 100vw;
+  border-radius: 2px;
+  display: grid;
+  grid-template-columns: repeat(26, 1fr);
+  grid-template-rows: repeat(26, 1fr);
+  overflow: hidden;
+  border-collapse: collapse;
+}
+
+.snake-head {
+  background-image: url('/snake-head.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: default;
+  position: relative;
+  border-radius: 2px;
+  z-index: 10;
+
+  &::before,
+  &::after {
+    content: '';
+    width: 1.5px;
+    height: 1.5px;
+    background-color: red;
+    position: absolute;
+    translate: auto -50%;
+  }
+
+  &::before {
+    bottom: -1.5px;
+    left: 50%;
+  }
+
+  &::after {
+    bottom: -3px;
+    left: calc(50% - 1px);
+  }
+}
+
+.snake-tail,
+.snake-body {
+  background-color: var(--snake-color);
+  border-radius: 2px;
+  width: 100%;
+}
+
+.snake-body {
+  border: 0.5px solid var(--screen-border);
+}
+
+.empty-field {
+  position: relative;
+
+  &[data-bg-colors='color-one'] {
+    background-color: var(--bg-screen-one);
+  }
+
+  &[data-bg-colors='color-two'] {
+    background-color: var(--bg-screen-two);
+  }
+
+  &[data-point='fruit-apple']::before {
+    content: '';
+    background-image: url('/apple.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: block;
+    cursor: default;
+    width: 130%;
+    height: 130%;
+    position: absolute;
+    inset: 50%;
+    translate: -50% -50%;
+    z-index: 10;
+  }
+}

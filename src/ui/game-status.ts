@@ -11,3 +11,10 @@ export function renderSpeedSnakeUI(speed: number) {
 
   element.innerText = `${Math.ceil(speed)}/ms`
 }
+
+export function renderBestScoreSnakeUI(score: number) {
+  const element = document.getElementById('game-best-score')
+  if (!element) return
+
+  element.innerText = score.toString()
+}

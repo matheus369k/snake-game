@@ -21,6 +21,7 @@ import { gameStartDisplayUI } from '@/ui/game-start-display'
 export function runningSnakeGame() {
   const updateVariables = new UpdateVariables()
   gameStartDisplayUI(snakeDirection.current)
+  let loadCount = 0
 
   const intervalID = setInterval(() => {
     const nextPosition = calculateSnakeNextPosition({
@@ -51,24 +52,29 @@ export function runningSnakeGame() {
     )
 
     loadSnakeUI<typeof snakeDirection.current>(matriz, snakeDirection.current)
-
-    const eatingCount = loadFruitUI({
-      columnSize,
-      rowSize,
-    })
-
-    if (eatingCount) {
-      updateVariables.updateUserPointCount(userPointCount + eatingCount)
-      updateVariables.updateSnakeSpeedInMs(snakeSpeedInMs - userPointCount / 10)
-
-      renderCountUI(userPointCount - 1)
-      renderSpeedSnakeUI(snakeSpeedInMs)
-
-      clearInterval(runSnakeIntervalID)
-      updateVariables.updateRunSnakeIntervalID(0)
-      runningSnakeGame()
-    }
+    updatePointCountAndSnakeSpeed(loadCount)
+    loadCount++
   }, snakeSpeedInMs)
 
   updateVariables.updateRunSnakeIntervalID(intervalID)
+}
+
+function updatePointCountAndSnakeSpeed(loadCount: number) {
+  const updateVariables = new UpdateVariables()
+  const eatingCount = loadFruitUI({
+    columnSize,
+    rowSize,
+  })
+
+  if (eatingCount && loadCount) {
+    updateVariables.updateUserPointCount(userPointCount + eatingCount)
+    updateVariables.updateSnakeSpeedInMs(snakeSpeedInMs - userPointCount / 10)
+
+    renderCountUI(userPointCount)
+    renderSpeedSnakeUI(snakeSpeedInMs)
+
+    clearInterval(runSnakeIntervalID)
+    updateVariables.updateRunSnakeIntervalID(0)
+    runningSnakeGame()
+  }
 }

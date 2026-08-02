@@ -16,8 +16,13 @@ import {
 import { gameOverDisplayUI } from '@/ui/game-over-display'
 import { togglePauseDisplayUI } from '@/ui/pause-display'
 import { resetFruitUI } from '@/ui/fruit'
-import { renderCountUI, renderSpeedSnakeUI } from '@/ui/game-status'
+import {
+  renderBestScoreSnakeUI,
+  renderCountUI,
+  renderSpeedSnakeUI,
+} from '@/ui/game-status'
 import { generateMatriz } from './screen-matriz'
+import { getBestScore, setBestScore } from '@/util/best-score'
 
 export function pausedGame() {
   const element = document.getElementById('pause-button') as HTMLButtonElement
@@ -42,6 +47,7 @@ export function pausedGame() {
 export function startGame() {
   loadSnakeUI<typeof snakeDirection.current>(matriz, snakeDirection.current)
   gameStartDisplayUI(snakeDirection.current)
+  renderBestScoreSnakeUI(getBestScore())
 
   document.getElementById('run-game')?.addEventListener('click', (event) => {
     event.stopImmediatePropagation()
@@ -81,12 +87,15 @@ export function gameOver(props: { positionY: number; positionX: number }) {
   )
 
   gameOverDisplayUI({
+    bestScore: getBestScore(),
     speed: snakeSpeedInMs,
     score: userPointCount,
     isGameOver,
   })
 
   if (isGameOver) {
+    setBestScore(userPointCount)
+
     resetSnakeGame()
     clearInterval(runSnakeIntervalID)
     updateVariables.updateRunSnakeIntervalID(0)
@@ -120,6 +129,7 @@ export function resetSnakeGame() {
     renderCountUI(userPointCount)
     renderSpeedSnakeUI(snakeSpeedInMs)
     gameOverDisplayUI({
+      bestScore: getBestScore(),
       speed: snakeSpeedInMs,
       score: userPointCount,
       isGameOver,

@@ -1,6 +1,7 @@
 type GameOverDisplayUIProps = {
   score: number
   speed: number
+  bestScore: number
   isGameOver: boolean
 }
 export function gameOverDisplayUI(props: GameOverDisplayUIProps) {
@@ -14,6 +15,7 @@ export function gameOverDisplayUI(props: GameOverDisplayUIProps) {
       '<div>' +
       `<span>Pontuação: ${props.score}</span>` +
       `<span>Velocidade(ms): ${Math.ceil(props.speed)}</span>` +
+      `<span>Melhor Pontuação: ${props.bestScore}</span>` +
       '</div>' +
       '<button id="reset-game">Reiniciar</button>'
   }
