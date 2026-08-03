@@ -14,7 +14,7 @@
 
 ## Descrição
 
-O site é uma aplicação web interativa que recria o clássico Snake Game (o famoso "jogo da cobrinha").
+O site é uma aplicação web interativa que recria o clássico Snake Game (o famoso "jogo da cobrinha"). Sendo essa uma aplicação compatível tanto em ambiente desktop quanto mobile.
 
 controles
 
