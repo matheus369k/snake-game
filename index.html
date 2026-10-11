@@ -94,16 +94,16 @@
       src="https://www.googletagmanager.com/gtag/js?id=G-FDN4CNM3X9"
     ></script>
     <script>
-      window.dataLayer = window.dataLayer || []
+      window.dataLayer = window.dataLayer || [];
       function gtag() {
-        dataLayer.push(arguments)
+        dataLayer.push(arguments);
       }
-      gtag('js', new Date())
+      gtag("js", new Date());
 
-      gtag('config', 'G-FDN4CNM3X9')
+      gtag("config", "G-FDN4CNM3X9");
     </script>
-    <script type="module" crossorigin src="/snake-game/assets/index-DDzfyrlb.js"></script>
-    <link rel="stylesheet" crossorigin href="/snake-game/assets/index-B1H3WXhJ.css">
+    <script type="module" crossorigin src="/snake-game/assets/index-Cv5tTB1E.js"></script>
+    <link rel="stylesheet" crossorigin href="/snake-game/assets/index-rc0yxqfE.css">
   </head>
   <body>
     <div id="app">
@@ -113,29 +113,30 @@
         <div id="game-best-score">0</div>
       </div>
 
-      <button id="pause-button">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          stroke="none"
-        >
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g
-            id="SVGRepo_tracerCarrier"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></g>
-          <g id="SVGRepo_iconCarrier">
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M5.163 3.819C5 4.139 5 4.559 5 5.4v13.2c0 .84 0 1.26.163 1.581a1.5 1.5 0 0 0 .656.655c.32.164.74.164 1.581.164h.2c.84 0 1.26 0 1.581-.163a1.5 1.5 0 0 0 .656-.656c.163-.32.163-.74.163-1.581V5.4c0-.84 0-1.26-.163-1.581a1.5 1.5 0 0 0-.656-.656C8.861 3 8.441 3 7.6 3h-.2c-.84 0-1.26 0-1.581.163a1.5 1.5 0 0 0-.656.656zm9 0C14 4.139 14 4.559 14 5.4v13.2c0 .84 0 1.26.164 1.581a1.5 1.5 0 0 0 .655.655c.32.164.74.164 1.581.164h.2c.84 0 1.26 0 1.581-.163a1.5 1.5 0 0 0 .655-.656c.164-.32.164-.74.164-1.581V5.4c0-.84 0-1.26-.163-1.581a1.5 1.5 0 0 0-.656-.656C17.861 3 17.441 3 16.6 3h-.2c-.84 0-1.26 0-1.581.163a1.5 1.5 0 0 0-.655.656z"
-              fill="#ffffff"
-            ></path>
-          </g>
-        </svg>
-      </button>
+      <div id="game-settings">
+        <i id="pause-button">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="none"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M5.163 3.819C5 4.139 5 4.559 5 5.4v13.2c0 .84 0 1.26.163 1.581a1.5 1.5 0 0 0 .656.655c.32.164.74.164 1.581.164h.2c.84 0 1.26 0 1.581-.163a1.5 1.5 0 0 0 .656-.656c.163-.32.163-.74.163-1.581V5.4c0-.84 0-1.26-.163-1.581a1.5 1.5 0 0 0-.656-.656C8.861 3 8.441 3 7.6 3h-.2c-.84 0-1.26 0-1.581.163a1.5 1.5 0 0 0-.656.656zm9 0C14 4.139 14 4.559 14 5.4v13.2c0 .84 0 1.26.164 1.581a1.5 1.5 0 0 0 .655.655c.32.164.74.164 1.581.164h.2c.84 0 1.26 0 1.581-.163a1.5 1.5 0 0 0 .655-.656c.164-.32.164-.74.164-1.581V5.4c0-.84 0-1.26-.163-1.581a1.5 1.5 0 0 0-.656-.656C17.861 3 17.441 3 16.6 3h-.2c-.84 0-1.26 0-1.581.163a1.5 1.5 0 0 0-.655.656z"
+                fill="#ffffff"
+              ></path>
+            </g></svg></i
+        ><i id="sound-button" data-sound="on"></i>
+      </div>
 
       <div id="screen">
         <!-- Snake Field -->
