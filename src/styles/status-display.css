@@ -10,6 +10,10 @@
 
   @media (width <= 1024px) {
     flex-direction: row;
+    bottom: 1rem;
+    translate: -50%;
+    left: 50%;
+    top: auto;
   }
 }
 
@@ -28,7 +32,7 @@
 #game-speed::after,
 #game-best-score::after,
 #game-points::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   right: 0;
@@ -43,13 +47,13 @@
 }
 
 #game-points::after {
-  background-image: url('/apple.svg');
+  background-image: url("/assets/apple.svg");
 }
 
 #game-speed::after {
-  background-image: url('/thunder.svg');
+  background-image: url("/assets/thunder.svg");
 }
 
 #game-best-score::after {
-  background-image: url('/medal.svg');
+  background-image: url("/assets/medal.svg");
 }

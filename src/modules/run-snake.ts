@@ -1,6 +1,7 @@
-import { calculateSnakeNextPosition } from '@/util/calculate-snake-next-position'
+import { calculateSnakeNextPosition } from "@/util/calculate-snake-next-position";
 import {
   columnSize,
+  gameSounds,
   matriz,
   rowSize,
   runSnakeIntervalID,
@@ -9,19 +10,20 @@ import {
   snakeSpeedInMs,
   UpdateVariables,
   userPointCount,
-} from '@/util/global-variables'
-import { snakeDirection } from './control-manager'
-import { gameOver } from './control-display'
-import { updateMatriz } from './screen-matriz'
-import { loadSnakeUI } from '@/ui/snake'
-import { loadFruitUI } from '@/ui/fruit'
-import { renderCountUI, renderSpeedSnakeUI } from '@/ui/game-status'
-import { gameStartDisplayUI } from '@/ui/game-start-display'
+} from "@/util/global-variables";
+import { snakeDirection } from "./control-manager";
+import { gameOver } from "./control-display";
+import { updateMatriz } from "./screen-matriz";
+import { loadSnakeUI } from "@/ui/snake";
+import { loadFruitUI } from "@/ui/fruit";
+import { renderCountUI, renderSpeedSnakeUI } from "@/ui/game-status";
+import { gameStartDisplayUI } from "@/ui/game-start-display";
+import { getBestScore, setBestScore } from "@/util/best-score";
 
 export function runningSnakeGame() {
-  const updateVariables = new UpdateVariables()
-  gameStartDisplayUI(snakeDirection.current)
-  let loadCount = 0
+  const updateVariables = new UpdateVariables();
+  gameStartDisplayUI(snakeDirection.current);
+  let loadCount = 0;
 
   const intervalID = setInterval(() => {
     const nextPosition = calculateSnakeNextPosition({
@@ -30,17 +32,17 @@ export function runningSnakeGame() {
       positionX: snakePositionX,
       columnSize: columnSize,
       rowSize: rowSize,
-    })
+    });
 
     gameOver({
       positionY: nextPosition.positionY,
       positionX: nextPosition.positionX,
-    })
+    });
 
     updateVariables.updateSnakePositions({
       newValueX: nextPosition.positionX,
       newValueY: nextPosition.positionY,
-    })
+    });
 
     updateVariables.updateMatriz(
       updateMatriz({
@@ -49,32 +51,36 @@ export function runningSnakeGame() {
         userPointCount: userPointCount,
         matriz: matriz,
       }),
-    )
+    );
 
-    loadSnakeUI<typeof snakeDirection.current>(matriz, snakeDirection.current)
-    updatePointCountAndSnakeSpeed(loadCount)
-    loadCount++
-  }, snakeSpeedInMs)
+    loadSnakeUI<typeof snakeDirection.current>(matriz, snakeDirection.current);
+    updatePointCountAndSnakeSpeed(loadCount);
+    loadCount++;
+  }, snakeSpeedInMs);
 
-  updateVariables.updateRunSnakeIntervalID(intervalID)
+  updateVariables.updateRunSnakeIntervalID(intervalID);
 }
 
 function updatePointCountAndSnakeSpeed(loadCount: number) {
-  const updateVariables = new UpdateVariables()
+  const updateVariables = new UpdateVariables();
   const eatingCount = loadFruitUI({
     columnSize,
     rowSize,
-  })
+  });
 
   if (eatingCount && loadCount) {
-    updateVariables.updateUserPointCount(userPointCount + eatingCount)
-    updateVariables.updateSnakeSpeedInMs(snakeSpeedInMs - userPointCount / 10)
+    updateVariables.updateUserPointCount(userPointCount + eatingCount);
+    updateVariables.updateSnakeSpeedInMs(snakeSpeedInMs - userPointCount / 10);
 
-    renderCountUI(userPointCount)
-    renderSpeedSnakeUI(snakeSpeedInMs)
+    renderCountUI(userPointCount);
+    renderSpeedSnakeUI(snakeSpeedInMs);
 
-    clearInterval(runSnakeIntervalID)
-    updateVariables.updateRunSnakeIntervalID(0)
-    runningSnakeGame()
+    clearInterval(runSnakeIntervalID);
+    updateVariables.updateRunSnakeIntervalID(0);
+    runningSnakeGame();
+
+    const isNewHighScore = getBestScore() < userPointCount;
+    gameSounds.playScoreSound(isNewHighScore);
+    if (isNewHighScore) setBestScore(userPointCount);
   }
 }

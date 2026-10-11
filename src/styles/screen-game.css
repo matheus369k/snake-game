@@ -13,7 +13,7 @@
 }
 
 .snake-head {
-  background-image: url('/snake-head.png');
+  background-image: url("/assets/snake-head.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -24,7 +24,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     width: 1.5px;
     height: 1.5px;
     background-color: red;
@@ -57,17 +57,17 @@
 .empty-field {
   position: relative;
 
-  &[data-bg-colors='color-one'] {
+  &[data-bg-colors="color-one"] {
     background-color: var(--bg-screen-one);
   }
 
-  &[data-bg-colors='color-two'] {
+  &[data-bg-colors="color-two"] {
     background-color: var(--bg-screen-two);
   }
 
-  &[data-point='fruit-apple']::before {
-    content: '';
-    background-image: url('/apple.svg');
+  &[data-point="fruit-apple"]::before {
+    content: "";
+    background-image: url("/assets/apple.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

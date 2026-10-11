@@ -1,62 +1,65 @@
-import type { MatrizType } from '@/@types/types'
-import { generateMatriz } from '@/modules/screen-matriz'
+import type { MatrizType } from "@/@types/types";
+import { generateMatriz } from "@/modules/screen-matriz";
+import { GameSounds } from "./sounds";
 
-export let runSnakeIntervalID: number
+export let runSnakeIntervalID: number;
 
-export let isGameOver: boolean = false
+export let isGameOver: boolean = false;
 
-export let snakePositionY = 12
-export let snakePositionX = 12
+export let snakePositionY = 12;
+export let snakePositionX = 12;
 
-export let userPointCount = 0
-export let snakeSpeedInMs = 250
+export let userPointCount = 0;
+export let snakeSpeedInMs = 250;
 
-export let columnSize = (snakePositionY + 1) * 2
-export let rowSize = (snakePositionX + 1) * 2
+export let columnSize = (snakePositionY + 1) * 2;
+export let rowSize = (snakePositionX + 1) * 2;
 export let matriz = generateMatriz({
   columnSize,
   rowSize,
-})
+});
 
-export let touchStartX = 0
-export let touchStartY = 0
+export let touchStartX = 0;
+export let touchStartY = 0;
+
+export let gameSounds = new GameSounds();
 
 export class UpdateVariables {
   public updateRunSnakeIntervalID(newValue: number) {
-    runSnakeIntervalID = newValue
+    runSnakeIntervalID = newValue;
   }
 
   public updateIsGameOver(newValue: boolean) {
-    isGameOver = newValue
+    isGameOver = newValue;
   }
 
   public updateSnakePositions(props: { newValueX: number; newValueY: number }) {
-    snakePositionX = props.newValueX
-    snakePositionY = props.newValueY
+    snakePositionX = props.newValueX;
+    snakePositionY = props.newValueY;
   }
 
   public updateUserPointCount(newValue: number) {
-    userPointCount = newValue
+    userPointCount = newValue;
   }
 
   public updateSnakeSpeedInMs(newValue: number) {
-    snakeSpeedInMs = newValue
+    snakeSpeedInMs = newValue;
   }
 
   public updateMatriz(newValue: MatrizType) {
-    matriz = newValue
+    matriz = newValue;
   }
 
   public updateTouchStart(props: { newValueX: number; newValueY: number }) {
-    touchStartX = props.newValueX
-    touchStartY = props.newValueY
+    touchStartX = props.newValueX;
+    touchStartY = props.newValueY;
   }
 
   public updateColumnSize(newValue: number) {
-    columnSize = newValue
+    columnSize = newValue;
   }
 
   public updateRowSize(newValue: number) {
-    rowSize = newValue
+    rowSize = newValue;
   }
 }

@@ -1,76 +1,76 @@
-import type { MatrizType } from '@/@types/types'
+import type { MatrizType } from "@/@types/types";
 
 type GenerateMatrizProps = {
-  rowSize: number
-  columnSize: number
-}
+  rowSize: number;
+  columnSize: number;
+};
 
 export function generateMatriz(props: GenerateMatrizProps) {
-  const { columnSize, rowSize } = props
+  const { columnSize, rowSize } = props;
 
   return Array.from({ length: columnSize }).map((_, positionY) =>
     Array.from({ length: rowSize }).map((_, positionX) => {
-      const centerPositionY = columnSize / 2 - 1
-      const centerPositionX = rowSize / 2 - 1
+      const centerPositionY = columnSize / 2 - 1;
+      const centerPositionX = rowSize / 2 - 1;
 
       const isHeadPosition =
-        positionX === centerPositionX && positionY === centerPositionY
+        positionX === centerPositionX && positionY === centerPositionY;
       if (isHeadPosition) {
-        return 'head'
+        return "head";
       }
 
       const isTailPosition =
-        positionX === centerPositionX && positionY === centerPositionY - 1
+        positionX === centerPositionX && positionY === centerPositionY - 1;
       if (isTailPosition) {
-        return 'tail'
+        return "tail";
       }
 
-      return 'void'
+      return "void";
     }),
-  ) as MatrizType
+  ) as MatrizType;
 }
 
 type UpdateMatrizProps = {
-  nextPositionX: number
-  nextPositionY: number
-  userPointCount: number
-  matriz: MatrizType
-}
+  nextPositionX: number;
+  nextPositionY: number;
+  userPointCount: number;
+  matriz: MatrizType;
+};
 
 export function updateMatriz(props: UpdateMatrizProps) {
-  const { nextPositionX, nextPositionY, matriz, userPointCount } = props
+  const { nextPositionX, nextPositionY, matriz, userPointCount } = props;
 
   for (let positionY = 0; positionY < matriz.length; positionY++) {
     for (let positionX = 0; positionX < matriz[positionY].length; positionX++) {
-      const element = matriz[positionY][positionX]
+      const element = matriz[positionY][positionX];
 
       if (positionY === nextPositionY && positionX === nextPositionX) {
-        matriz[positionY][positionX] = 'head'
-        continue
+        matriz[positionY][positionX] = "head";
+        continue;
       }
 
-      if (element === 'head') {
-        matriz[positionY][positionX] = 'body-1'
-        continue
+      if (element === "head") {
+        matriz[positionY][positionX] = "body-1";
+        continue;
       }
 
-      const snakeBodyNumber = Number(element.split('-')[1]) + 1
-      if (element.includes('body') && snakeBodyNumber <= userPointCount) {
-        matriz[positionY][positionX] = `body-${snakeBodyNumber}` as any
-        continue
+      const snakeBodyNumber = Number(element.split("-")[1]) + 1;
+      if (element.includes("body") && snakeBodyNumber <= userPointCount) {
+        matriz[positionY][positionX] = `body-${snakeBodyNumber}` as any;
+        continue;
       }
 
       if (element === `body-${userPointCount}`) {
-        matriz[positionY][positionX] = 'tail'
-        continue
+        matriz[positionY][positionX] = "tail";
+        continue;
       }
 
-      if (element === 'tail' || element.includes('body')) {
-        matriz[positionY][positionX] = 'void'
-        continue
+      if (element === "tail" || element.includes("body")) {
+        matriz[positionY][positionX] = "void";
+        continue;
       }
     }
   }
 
-  return matriz
+  return matriz;
 }

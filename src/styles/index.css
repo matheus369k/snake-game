@@ -1,8 +1,8 @@
-@import url('./status-display.css');
-@import url('./screen-game.css');
-@import url('./pause-display.css');
-@import url('./game-over-display.css');
-@import url('./game-start-display.css');
+@import url("./status-display.css");
+@import url("./screen-game.css");
+@import url("./game-settings.css");
+@import url("./game-over-display.css");
+@import url("./game-start-display.css");
 
 :root {
   --text: white;
@@ -12,8 +12,8 @@
   --bg-screen-two: #0f1e00;
   --screen-border: #0b150064;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   --snake-color: #ccdb38;

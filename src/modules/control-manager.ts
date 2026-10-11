@@ -1,190 +1,193 @@
-import { togglePauseDisplayUI } from '@/ui/pause-display'
-import { runningCurrentDirectionKeyBoard } from '@/util/detected-direction'
+import { togglePauseDisplayUI } from "@/ui/pause-display";
+import { runningCurrentDirectionKeyBoard } from "@/util/detected-direction";
 import {
+  gameSounds,
   isGameOver,
   runSnakeIntervalID,
   touchStartX,
   touchStartY,
   UpdateVariables,
-} from '@/util/global-variables'
-import { resetSnakeGame, runSnakeGameAgain } from './control-display'
-import { runningSnakeGame } from './run-snake'
+} from "@/util/global-variables";
+import { resetSnakeGame, runSnakeGameAgain } from "./control-display";
+import { runningSnakeGame } from "./run-snake";
 
 export const controlsKeys = {
-  top: ['ArrowUp', 'KeyW'],
-  right: ['ArrowRight', 'KeyD'],
-  bottom: ['ArrowDown', 'KeyS'],
-  left: ['ArrowLeft', 'KeyA'],
-  stop: ['Escape', 'Space'],
-}
+  top: ["ArrowUp", "KeyW"],
+  right: ["ArrowRight", "KeyD"],
+  bottom: ["ArrowDown", "KeyS"],
+  left: ["ArrowLeft", "KeyA"],
+  stop: ["Escape", "Space"],
+};
 
-type ControlsDirectionName = keyof typeof controlsKeys | 'start'
+type ControlsDirectionName = keyof typeof controlsKeys | "start";
 type SnakeDirection = {
-  previous: ControlsDirectionName
-  current: ControlsDirectionName
-}
+  previous: ControlsDirectionName;
+  current: ControlsDirectionName;
+};
 
 export const snakeDirection: SnakeDirection = {
-  previous: 'bottom',
-  current: 'start',
-}
+  previous: "bottom",
+  current: "start",
+};
 const controlsKeysArray = Object.entries(controlsKeys) as [
   ControlsDirectionName,
   string[],
-][]
+][];
 
-type KeyBoardControlManagerProps = Pick<KeyboardEvent, 'code'>
+type KeyBoardControlManagerProps = Pick<KeyboardEvent, "code">;
 
 export function keyBoardControlManager({ code }: KeyBoardControlManagerProps) {
-  if (code === 'reset') {
-    snakeDirection.current = 'start'
-    snakeDirection.previous = 'bottom'
-    return
+  if (code === "reset") {
+    snakeDirection.current = "start";
+    snakeDirection.previous = "bottom";
+    return;
   }
 
   const currentDirectionKeyCode =
     runningCurrentDirectionKeyBoard<ControlsDirectionName>({
       keyBoardName: code,
       controlsKeys: controlsKeysArray,
-    })
+    });
 
   const notTurnedFromStartToStop =
-    snakeDirection.current === 'start' && currentDirectionKeyCode === 'stop'
-  if (notTurnedFromStartToStop) return
+    snakeDirection.current === "start" && currentDirectionKeyCode === "stop";
+  if (notTurnedFromStartToStop) return;
 
   const notTurnedFromTopToBottom =
-    snakeDirection.current === 'bottom' && currentDirectionKeyCode === 'top'
-  if (notTurnedFromTopToBottom) return
+    snakeDirection.current === "bottom" && currentDirectionKeyCode === "top";
+  if (notTurnedFromTopToBottom) return;
 
   const notTurnedFromBottomToTop =
-    snakeDirection.current === 'top' && currentDirectionKeyCode === 'bottom'
-  if (notTurnedFromBottomToTop) return
+    snakeDirection.current === "top" && currentDirectionKeyCode === "bottom";
+  if (notTurnedFromBottomToTop) return;
 
   const notTurnedFromLeftToRight =
-    snakeDirection.current === 'left' && currentDirectionKeyCode === 'right'
-  if (notTurnedFromLeftToRight) return
+    snakeDirection.current === "left" && currentDirectionKeyCode === "right";
+  if (notTurnedFromLeftToRight) return;
 
   const notTurnedFromRightToLeft =
-    snakeDirection.current === 'right' && currentDirectionKeyCode === 'left'
-  if (notTurnedFromRightToLeft) return
+    snakeDirection.current === "right" && currentDirectionKeyCode === "left";
+  if (notTurnedFromRightToLeft) return;
 
-  const { current, previous } = snakeDirection
+  const { current, previous } = snakeDirection;
   const notClickedInStopTwoTimes =
-    snakeDirection.current === 'stop' && currentDirectionKeyCode === 'stop'
+    snakeDirection.current === "stop" && currentDirectionKeyCode === "stop";
   if (notClickedInStopTwoTimes) {
-    snakeDirection.current = previous === 'start' ? 'bottom' : previous
-    snakeDirection.previous = current
-    return
+    snakeDirection.current = previous === "start" ? "bottom" : previous;
+    snakeDirection.previous = current;
+    return;
   }
 
-  const snakeHeadElement = document.querySelector('.snake-head')
-  const snakeHeadID = snakeHeadElement?.id.split('/')
-  let snakeHeadCoordinateX = Number(snakeHeadID?.[0].split('X-')[1])
-  let snakeHeadCoordinateY = Number(snakeHeadID?.[1].split('Y-')[1])
-  let snakeElement = null
+  const snakeHeadElement = document.querySelector(".snake-head");
+  const snakeHeadID = snakeHeadElement?.id.split("/");
+  let snakeHeadCoordinateX = Number(snakeHeadID?.[0].split("X-")[1]);
+  let snakeHeadCoordinateY = Number(snakeHeadID?.[1].split("Y-")[1]);
+  let snakeElement = null;
   switch (currentDirectionKeyCode) {
-    case 'top':
+    case "top":
       snakeElement = document.getElementById(
         `X-${snakeHeadCoordinateX - 1}/Y-${snakeHeadCoordinateY}`,
-      )
-      break
-    case 'bottom':
+      );
+      break;
+    case "bottom":
       snakeElement = document.getElementById(
         `X-${snakeHeadCoordinateX + 1}/Y-${snakeHeadCoordinateY}`,
-      )
-      break
-    case 'left':
+      );
+      break;
+    case "left":
       snakeElement = document.getElementById(
         `X-${snakeHeadCoordinateX}/Y-${snakeHeadCoordinateY - 1}`,
-      )
-      break
-    case 'right':
+      );
+      break;
+    case "right":
       snakeElement = document.getElementById(
         `X-${snakeHeadCoordinateX}/Y-${snakeHeadCoordinateY + 1}`,
-      )
-      break
+      );
+      break;
   }
 
-  if (snakeElement && !snakeElement.classList.contains('empty-field')) return
+  if (snakeElement && !snakeElement.classList.contains("empty-field")) return;
 
   if (currentDirectionKeyCode) {
-    snakeDirection.current = currentDirectionKeyCode
-    snakeDirection.previous = current
-    return
+    snakeDirection.current = currentDirectionKeyCode;
+    snakeDirection.previous = current;
+
+    gameSounds.playTurnSideSound();
+    return;
   }
 }
 
 type TouchControlManagerProps = {
-  touchStartX: number
-  touchStartY: number
-  touchEndX: number
-  touchEndY: number
-}
+  touchStartX: number;
+  touchStartY: number;
+  touchEndX: number;
+  touchEndY: number;
+};
 export function touchControlManager(props: TouchControlManagerProps) {
-  const { touchStartX, touchStartY, touchEndX, touchEndY } = props
+  const { touchStartX, touchStartY, touchEndX, touchEndY } = props;
 
   const calcStartToEndPositionX = Math.abs(
     Math.abs(touchStartX) - Math.abs(touchEndX),
-  )
+  );
   const calcStartToEndPositionY = Math.abs(
     Math.abs(touchStartY) - Math.abs(touchEndY),
-  )
+  );
 
   let touchDirection: keyof typeof controlsKeys =
-    touchStartX > touchEndX ? 'left' : 'right'
+    touchStartX > touchEndX ? "left" : "right";
   if (calcStartToEndPositionY > calcStartToEndPositionX) {
-    touchDirection = touchStartY > touchEndY ? 'top' : 'bottom'
+    touchDirection = touchStartY > touchEndY ? "top" : "bottom";
   }
 
-  const customKeyBoardEvent = new KeyboardEvent('keydown', {
+  const customKeyBoardEvent = new KeyboardEvent("keydown", {
     code: controlsKeys[touchDirection][0],
     key: controlsKeys[touchDirection][0],
     cancelable: true,
     bubbles: true,
-  })
-  document.dispatchEvent(customKeyBoardEvent)
+  });
+  document.dispatchEvent(customKeyBoardEvent);
 }
 
 export function keyDownHandler(props: KeyboardEvent) {
-  if (isGameOver) return
-  keyBoardControlManager({ code: props.code })
-  togglePauseDisplayUI(snakeDirection.current)
+  if (isGameOver) return;
+  keyBoardControlManager({ code: props.code });
+  togglePauseDisplayUI(snakeDirection.current);
 
-  const isPaused = snakeDirection.current === 'stop'
+  const isPaused = snakeDirection.current === "stop";
   if (isPaused) {
-    runSnakeGameAgain()
-    resetSnakeGame()
+    runSnakeGameAgain();
+    resetSnakeGame();
 
-    clearInterval(runSnakeIntervalID)
-    const updateVariables = new UpdateVariables()
-    updateVariables.updateRunSnakeIntervalID(0)
-    return
+    clearInterval(runSnakeIntervalID);
+    const updateVariables = new UpdateVariables();
+    updateVariables.updateRunSnakeIntervalID(0);
+    return;
   }
 
-  if (snakeDirection.current === 'start') return
-  if (runSnakeIntervalID) return
-  runningSnakeGame()
+  if (snakeDirection.current === "start") return;
+  if (runSnakeIntervalID) return;
+  runningSnakeGame();
 }
 
 export function touchEndHandler(props: TouchEvent) {
-  if (snakeDirection.current === 'start') return
-  if (snakeDirection.current === 'stop') return
+  if (snakeDirection.current === "start") return;
+  if (snakeDirection.current === "stop") return;
 
   touchControlManager({
     touchEndX: props.changedTouches[0].screenX,
     touchEndY: props.changedTouches[0].screenY,
     touchStartX: touchStartX,
     touchStartY: touchStartY,
-  })
+  });
 }
 
 export function touchStartHandler(props: TouchEvent) {
-  if (snakeDirection.current === 'start') return
-  if (snakeDirection.current === 'stop') return
+  if (snakeDirection.current === "start") return;
+  if (snakeDirection.current === "stop") return;
 
-  const updateVariables = new UpdateVariables()
+  const updateVariables = new UpdateVariables();
   updateVariables.updateTouchStart({
     newValueX: props.changedTouches[0].screenX,
     newValueY: props.changedTouches[0].screenY,
-  })
+  });
 }

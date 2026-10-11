@@ -1,6 +1,6 @@
-import { loadSnakeUI } from '@/ui/snake'
-import { keyBoardControlManager, snakeDirection } from './control-manager'
-import { gameStartDisplayUI } from '@/ui/game-start-display'
+import { loadSnakeUI } from "@/ui/snake";
+import { keyBoardControlManager, snakeDirection } from "./control-manager";
+import { gameStartDisplayUI } from "@/ui/game-start-display";
 import {
   columnSize,
   isGameOver,
@@ -10,132 +10,149 @@ import {
   snakePositionX,
   snakePositionY,
   snakeSpeedInMs,
+  gameSounds,
   UpdateVariables,
   userPointCount,
-} from '@/util/global-variables'
-import { gameOverDisplayUI } from '@/ui/game-over-display'
-import { togglePauseDisplayUI } from '@/ui/pause-display'
-import { resetFruitUI } from '@/ui/fruit'
+} from "@/util/global-variables";
+import { gameOverDisplayUI } from "@/ui/game-over-display";
+import { togglePauseDisplayUI } from "@/ui/pause-display";
+import { resetFruitUI } from "@/ui/fruit";
 import {
   renderBestScoreSnakeUI,
   renderCountUI,
   renderSpeedSnakeUI,
-} from '@/ui/game-status'
-import { generateMatriz } from './screen-matriz'
-import { getBestScore, setBestScore } from '@/util/best-score'
+} from "@/ui/game-status";
+import { generateMatriz } from "./screen-matriz";
+import { getBestScore } from "@/util/best-score";
 
 export function pausedGame() {
-  const element = document.getElementById('pause-button') as HTMLButtonElement
-  if (!element) return
+  const element = document.getElementById("pause-button") as HTMLButtonElement;
+  if (!element) return;
 
-  element.disabled = snakeDirection.current === 'start'
+  element.disabled = snakeDirection.current === "start";
 
-  element.addEventListener('click', (event) => {
-    event.stopImmediatePropagation()
+  element.addEventListener("click", (event) => {
+    event.stopImmediatePropagation();
 
-    const customKeyBoardEvent = new KeyboardEvent('keydown', {
-      code: 'Escape',
-      key: 'Escape',
+    const customKeyBoardEvent = new KeyboardEvent("keydown", {
+      code: "Escape",
+      key: "Escape",
       bubbles: true,
       cancelable: true,
-    })
+    });
 
-    document.dispatchEvent(customKeyBoardEvent)
-  })
+    document.dispatchEvent(customKeyBoardEvent);
+  });
 }
 
 export function startGame() {
-  loadSnakeUI<typeof snakeDirection.current>(matriz, snakeDirection.current)
-  gameStartDisplayUI(snakeDirection.current)
-  renderBestScoreSnakeUI(getBestScore())
+  loadSnakeUI<typeof snakeDirection.current>(matriz, snakeDirection.current);
+  gameStartDisplayUI(snakeDirection.current);
+  renderBestScoreSnakeUI(getBestScore());
+  toggleSoundMuted();
 
-  document.getElementById('run-game')?.addEventListener('click', (event) => {
-    event.stopImmediatePropagation()
+  document.getElementById("run-game")?.addEventListener("click", (event) => {
+    event.stopImmediatePropagation();
 
-    const customKeyBoardEvent = new KeyboardEvent('keydown', {
-      code: 'ArrowDown',
-      key: 'ArrowDown',
+    gameSounds.playGameMusicSound();
+
+    const customKeyBoardEvent = new KeyboardEvent("keydown", {
+      code: "ArrowDown",
+      key: "ArrowDown",
       bubbles: true,
       cancelable: true,
-    })
+    });
 
-    document.dispatchEvent(customKeyBoardEvent)
-    gameStartDisplayUI(snakeDirection.current)
-    pausedGame()
-  })
+    document.dispatchEvent(customKeyBoardEvent);
+    gameStartDisplayUI(snakeDirection.current);
+    pausedGame();
+  });
+}
+
+export function toggleSoundMuted() {
+  document
+    .getElementById("sound-button")
+    ?.addEventListener("click", (event) => {
+      event.stopImmediatePropagation();
+      gameSounds.toggleMutedInAllSounds();
+
+      const buttonElement = event.target as Element;
+      const soundState = gameSounds.isMuted ? "off" : "on";
+      buttonElement.setAttribute("data-sound", soundState);
+    });
 }
 
 export function runSnakeGameAgain() {
-  document.getElementById('run-game')?.addEventListener('click', (event) => {
-    event.stopImmediatePropagation()
+  document.getElementById("run-game")?.addEventListener("click", (event) => {
+    event.stopImmediatePropagation();
 
-    const customKeyBoardEvent = new KeyboardEvent('keydown', {
-      code: 'Escape',
-      key: 'Escape',
+    const customKeyBoardEvent = new KeyboardEvent("keydown", {
+      code: "Escape",
+      key: "Escape",
       bubbles: true,
       cancelable: true,
-    })
+    });
 
-    document.dispatchEvent(customKeyBoardEvent)
-  })
+    document.dispatchEvent(customKeyBoardEvent);
+  });
 }
 
 export function gameOver(props: { positionY: number; positionX: number }) {
-  const updateVariables = new UpdateVariables()
+  const updateVariables = new UpdateVariables();
   updateVariables.updateIsGameOver(
-    matriz[props.positionY][props.positionX] !== 'void',
-  )
+    matriz[props.positionY][props.positionX] !== "void",
+  );
 
   gameOverDisplayUI({
     bestScore: getBestScore(),
     speed: snakeSpeedInMs,
     score: userPointCount,
     isGameOver,
-  })
+  });
 
   if (isGameOver) {
-    setBestScore(userPointCount)
+    resetSnakeGame();
+    clearInterval(runSnakeIntervalID);
+    updateVariables.updateRunSnakeIntervalID(0);
 
-    resetSnakeGame()
-    clearInterval(runSnakeIntervalID)
-    updateVariables.updateRunSnakeIntervalID(0)
-    return
+    gameSounds.playGameOverSound();
+    return;
   }
 }
 
 export function resetSnakeGame() {
-  document.getElementById('reset-game')?.addEventListener('click', (event) => {
-    event.stopImmediatePropagation()
+  document.getElementById("reset-game")?.addEventListener("click", (event) => {
+    event.stopImmediatePropagation();
 
-    keyBoardControlManager({ code: 'reset' })
-    togglePauseDisplayUI(snakeDirection.current)
-    resetFruitUI()
-    pausedGame()
+    keyBoardControlManager({ code: "reset" });
+    togglePauseDisplayUI(snakeDirection.current);
+    resetFruitUI();
+    pausedGame();
 
-    const updateVariables = new UpdateVariables()
-    updateVariables.updateIsGameOver(false)
-    updateVariables.updateSnakePositions({ newValueX: 12, newValueY: 12 })
-    updateVariables.updateUserPointCount(0)
-    updateVariables.updateSnakeSpeedInMs(250)
-    updateVariables.updateColumnSize((snakePositionY + 1) * 2)
-    updateVariables.updateRowSize((snakePositionX + 1) * 2)
+    const updateVariables = new UpdateVariables();
+    updateVariables.updateIsGameOver(false);
+    updateVariables.updateSnakePositions({ newValueX: 12, newValueY: 12 });
+    updateVariables.updateUserPointCount(0);
+    updateVariables.updateSnakeSpeedInMs(250);
+    updateVariables.updateColumnSize((snakePositionY + 1) * 2);
+    updateVariables.updateRowSize((snakePositionX + 1) * 2);
     updateVariables.updateMatriz(
       generateMatriz({
         columnSize: columnSize,
         rowSize: rowSize,
       }),
-    )
+    );
 
-    renderCountUI(userPointCount)
-    renderSpeedSnakeUI(snakeSpeedInMs)
+    renderCountUI(userPointCount);
+    renderSpeedSnakeUI(snakeSpeedInMs);
     gameOverDisplayUI({
       bestScore: getBestScore(),
       speed: snakeSpeedInMs,
       score: userPointCount,
       isGameOver,
-    })
+    });
 
-    const customStartLoadDom = new Event('DOMContentLoaded')
-    document.dispatchEvent(customStartLoadDom)
-  })
+    const customStartLoadDom = new Event("DOMContentLoaded");
+    document.dispatchEvent(customStartLoadDom);
+  });
 }
